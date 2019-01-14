@@ -3,6 +3,7 @@ package example.framgia.com.demo
 import android.app.Application
 import android.arch.lifecycle.AndroidViewModel
 import android.arch.lifecycle.MutableLiveData
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import example.framgia.com.demo.data.Repository
@@ -20,14 +21,20 @@ class MainViewModel(application: Application) : AndroidViewModel(application),
     private lateinit var repository: Repository
     private var app: Application = application
     private lateinit var itemAdapter: ItemAdapter
-    private var compositeDisposable: CompositeDisposable = CompositeDisposable()
+    private lateinit var compositeDisposable: CompositeDisposable
     private var user: MutableLiveData<User> = MutableLiveData()
 
     fun onCreate() {
+        Log.d("ON_CREATE","ON CREATE")
+        compositeDisposable = CompositeDisposable()
+    }
 
+    fun onResume(){
+        Log.d("ON_RESUME","ON RESUME")
     }
 
     fun onStop() {
+        Log.d("ON_STOP","ON STOP")
         compositeDisposable.clear()
     }
 
@@ -77,6 +84,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application),
 
 
     override fun onItemClick(view: View, user: User, pos: Int) {
-        this.user.value = user
+        this.user.postValue(user)
     }
 }

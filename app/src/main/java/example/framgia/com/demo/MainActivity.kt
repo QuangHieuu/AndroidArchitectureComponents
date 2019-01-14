@@ -1,7 +1,6 @@
 package example.framgia.com.demo
 
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
+import android.arch.lifecycle.*
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
@@ -13,12 +12,12 @@ import example.framgia.com.demo.data.model.User
 import kotlinx.android.synthetic.main.activity_main.*
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), LifecycleOwner {
 
     private lateinit var itemAdapter: ItemAdapter
     private lateinit var repository: Repository
-    private var user: User? = null
     private lateinit var viewModel: MainViewModel
+    private lateinit var lifecycleRegistry: LifecycleRegistry
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,15 +27,19 @@ class MainActivity : AppCompatActivity() {
         itemClick()
     }
 
-    override fun onStop() {
-        super.onStop()
-        viewModel.onStop()
+    override fun getLifecycle(): Lifecycle {
+        return lifecycleRegistry
     }
 
     private fun initView() {
+        lifecycleRegistry = LifecycleRegistry(this)
+        lifecycleRegistry.markState(Lifecycle.State.CREATED)
         itemAdapter = ItemAdapter()
         recycler_view.adapter = itemAdapter
         viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
+        val customLicycler = CustomLifecycle(lifecycleRegistry, viewModel)
+        lifecycle.addObserver(customLicycler)
+
     }
 
     private fun initData() {
