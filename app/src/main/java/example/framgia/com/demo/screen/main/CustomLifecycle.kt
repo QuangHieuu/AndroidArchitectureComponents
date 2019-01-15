@@ -1,4 +1,4 @@
-package example.framgia.com.demo
+package example.framgia.com.demo.screen.main
 
 import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.LifecycleObserver
@@ -9,12 +9,11 @@ class CustomLifecycle(private val lifecycle: Lifecycle, private val mainViewMode
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     fun onCreate() {
-        if (lifecycle.currentState.isAtLeast(Lifecycle.State.CREATED))
-            mainViewModel.onCreate()
+        mainViewModel.onCreate()
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
-    fun onResume(){
+    fun onResume() {
         mainViewModel.onResume()
     }
 

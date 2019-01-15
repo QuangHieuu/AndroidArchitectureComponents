@@ -1,4 +1,4 @@
-package example.framgia.com.demo
+package example.framgia.com.demo.screen.detail
 
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
@@ -6,7 +6,9 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import example.framgia.com.demo.R
 import example.framgia.com.demo.data.model.User
+import example.framgia.com.demo.screen.main.MainViewModel
 import kotlinx.android.synthetic.main.detail_fragment.view.*
 
 class DetailFragment : Fragment(), View.OnClickListener {

@@ -1,51 +1,53 @@
-package example.framgia.com.demo
+package example.framgia.com.demo.screen.main
 
-import android.arch.lifecycle.*
+import android.arch.lifecycle.LifecycleOwner
+import android.arch.lifecycle.LifecycleRegistry
+import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import example.framgia.com.demo.MainApplication
+import example.framgia.com.demo.R
 import example.framgia.com.demo.data.Repository
-import example.framgia.com.demo.data.local.AppDatabase
-import example.framgia.com.demo.data.local.LocalDataSource
 import example.framgia.com.demo.data.model.User
-import kotlinx.android.synthetic.main.activity_main.*
+import example.framgia.com.demo.databinding.ActivityMainBinding
+import example.framgia.com.demo.screen.detail.DetailFragment
+import javax.inject.Inject
 
 
 class MainActivity : AppCompatActivity(), LifecycleOwner {
 
+    @Inject
+    lateinit var lifecycleRegistry: LifecycleRegistry
+    @Inject
+    lateinit var repository: Repository
+    @Inject
+    lateinit var viewModel: MainViewModel
+    @Inject
+    lateinit var customLifecycle: CustomLifecycle
+    @Inject
+    lateinit var mainBinding: ActivityMainBinding
+
     private lateinit var itemAdapter: ItemAdapter
-    private lateinit var repository: Repository
-    private lateinit var viewModel: MainViewModel
-    private lateinit var lifecycleRegistry: LifecycleRegistry
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
         initView()
         initData()
         itemClick()
     }
 
-    override fun getLifecycle(): Lifecycle {
-        return lifecycleRegistry
-    }
-
     private fun initView() {
-        lifecycleRegistry = LifecycleRegistry(this)
-        lifecycleRegistry.markState(Lifecycle.State.CREATED)
+        DaggerMainComponent.builder().mainModule(MainModule(this))
+            .appComponent((application as MainApplication).getAppComponent()).build()
+            .inject(this)
+        mainBinding.viewModel = viewModel
         itemAdapter = ItemAdapter()
-        recycler_view.adapter = itemAdapter
-        viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
-        val customLicycler = CustomLifecycle(lifecycleRegistry, viewModel)
-        lifecycle.addObserver(customLicycler)
-
+        lifecycleRegistry.addObserver(customLifecycle)
     }
 
     private fun initData() {
-        val appDatabase = AppDatabase.getInstance(applicationContext)
-        val localDataSource = LocalDataSource.getInstance(appDatabase.userDao())
-        repository = Repository.getInstance(localDataSource)
         viewModel.setRepository(repository)
         viewModel.setAdapter(itemAdapter)
         viewModel.getAllUser()

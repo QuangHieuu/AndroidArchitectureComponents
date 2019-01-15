@@ -6,7 +6,7 @@ import android.arch.persistence.room.RoomDatabase
 import android.content.Context
 import example.framgia.com.demo.data.model.User
 
-@Database(entities = [User::class], version = 1)
+@Database(entities = [User::class], version = 1,exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
 

@@ -1,4 +1,4 @@
-package example.framgia.com.demo
+package example.framgia.com.demo.screen.main
 
 import android.app.Application
 import android.arch.lifecycle.AndroidViewModel
@@ -25,18 +25,20 @@ class MainViewModel(application: Application) : AndroidViewModel(application),
     private var user: MutableLiveData<User> = MutableLiveData()
 
     fun onCreate() {
-        Log.d("ON_CREATE","ON CREATE")
+        Log.d("ON_CREATE", "ON CREATE")
         compositeDisposable = CompositeDisposable()
     }
 
-    fun onResume(){
-        Log.d("ON_RESUME","ON RESUME")
+    fun onResume() {
+        Log.d("ON_RESUME", "ON RESUME")
     }
 
     fun onStop() {
-        Log.d("ON_STOP","ON STOP")
+        Log.d("ON_STOP", "ON STOP")
         compositeDisposable.clear()
     }
+
+    fun getItemAdapter() = itemAdapter
 
     fun setRepository(repository: Repository) {
         this.repository = repository

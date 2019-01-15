@@ -1,9 +1,10 @@
-package example.framgia.com.demo
+package example.framgia.com.demo.screen.main
 
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import example.framgia.com.demo.R
 import example.framgia.com.demo.data.model.User
 import kotlinx.android.synthetic.main.item_adapter.view.*
 
@@ -24,7 +25,11 @@ class ItemAdapter : RecyclerView.Adapter<ItemAdapter.Companion.ItemHolder>() {
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, p1: Int): ItemHolder {
         return ItemHolder(
-            LayoutInflater.from(viewGroup.context).inflate(R.layout.item_adapter, viewGroup, false),
+            LayoutInflater.from(viewGroup.context).inflate(
+                R.layout.item_adapter,
+                viewGroup,
+                false
+            ),
             itemClick
         )
     }
